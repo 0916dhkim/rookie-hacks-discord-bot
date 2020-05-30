@@ -75,8 +75,8 @@ impl Group {
 	// Get the position of a User in the members Vector
 	pub fn pos_of_member(&mut self, member: &User) -> Option<usize> {
 		for (i, e) in self.members.iter().enumerate() {
-			if member.equals(&e) {
-				Some(i);
+			if member.equals(e) {
+				return Some(i);
 			}
 		}
 		None
