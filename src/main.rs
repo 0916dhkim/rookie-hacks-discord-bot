@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate lazy_static;
+
 mod commands;
 use std::{
     env,
@@ -13,6 +16,7 @@ use serenity::{
 };
 use commands::{
     help::*,
+    ls::*,
     ping::*
 };
 
@@ -31,6 +35,7 @@ impl EventHandler for Handler {
 #[group]
 #[commands(
     help,
+    ls,
     ping
 )]
 struct General;
