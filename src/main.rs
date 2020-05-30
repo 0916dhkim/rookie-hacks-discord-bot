@@ -12,6 +12,7 @@ use serenity::{
     prelude::*,
 };
 use commands::{
+    help::*,
     ping::*
 };
 
@@ -28,7 +29,10 @@ impl EventHandler for Handler {
 
 // Create GENERAL_GROUP for commands.
 #[group]
-#[commands(ping)]
+#[commands(
+    help,
+    ping
+)]
 struct General;
 
 fn main() {
