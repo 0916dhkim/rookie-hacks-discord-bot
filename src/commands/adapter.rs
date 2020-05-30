@@ -67,18 +67,27 @@ impl Group {
 		self.members.push(User::from(new_member));
 	}
 
-  	pub fn contains_member(&mut self, member: &User) -> Option<usize> {
+	// Get the position of a User in the members Vector
+	pub fn pos_of_member(&mut self, member: &User) -> Option<usize> {
 		for (i, e) in self.members.iter().enumerate() {
 			if member.equals(&e) {
 				Some(i);
 			}
 		}
 		None
+ 	}
+
+	// Returns, if a User is listed in the members field of the group
+	pub fn contains_member(&mut self, member: &User) -> bool {
+		match self.pos_of_member(member) {
+			None => {false},
+			Some(x) => {true}
+		}
 	}
 
 	// Remove a User from an existing Group
 	pub fn remove_member(&mut self, member: &User) -> Option<User> {
-		let v = self.contains_member(member);
+		let v = self.pos_of_member(member);
 		match v {
 			None => {None},
 			Some(x) => {Some(self.members.swap_remove(x))}
@@ -134,6 +143,16 @@ pub fn list_groups() -> Vec<Group> {
 	v
 }
 
+pub fn group_of_member(user: &User) -> Option<Group> {
+	for (i, (_string, g)) in GROUPS.lock().unwrap().iter().enumerate() {
+		let mut group = (Group::from(&g));
+		if (group.contains_member(user)) {
+			return Some(group);
+		}
+	}
+	None
+}
+
 // List all groups in the system.
 pub fn pos_of_group(group: &Group) -> Option<usize> {
 	pos_of_group_name(&group.name)
@@ -175,12 +194,9 @@ pub fn list_free_users() -> Vec<User> {
 		let mut is_free: bool = true;
 
 		for g in GROUPS.lock().unwrap().iter() {
-			match Group::from(&g.1).contains_member(&user) {
-				None => continue,
-				Some(x) => {
-					is_free = false;
-					break;
-				}
+			if Group::from(&g.1).contains_member(&user) {
+				is_free = false;
+				break;
 			}
 		}
 

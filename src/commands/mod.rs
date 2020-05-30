@@ -4,3 +4,4 @@ pub mod ls;
 pub mod ping;
 pub mod whoami;
 pub mod create;
+pub mod leave;

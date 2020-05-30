@@ -19,7 +19,8 @@ use commands::{
 	ls::*,
 	ping::*,
 	whoami::*,
-	create::*
+	create::*,
+	leave::*
 };
 
 struct Handler;
@@ -40,7 +41,8 @@ impl EventHandler for Handler {
 	ls,
 	ping,
 	whoami,
-	create
+	create,
+	leave
 )]
 struct General;
 
