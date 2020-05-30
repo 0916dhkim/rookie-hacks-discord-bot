@@ -24,9 +24,9 @@ impl User {
 
 // Group struct.
 pub struct Group {
-	pub name: String,   // name of the group
+	pub name: String,   		// name of the group
 	pub description: String,	// group description
-	pub members: Vec<String>	// group member discord names
+	pub members: Vec<User>		// group member discord names
 }
 impl Group {
 	// constructor
@@ -44,7 +44,7 @@ impl Group {
 			&original.description[..]
 		);
 		for member in original.members.as_slice() {
-			ret.members.push(String::from(member));
+			ret.members.push(User::from(member));
 		}
 		ret
 	}
@@ -90,10 +90,10 @@ pub fn list_free_users() -> Vec<User> {
 }
 
 // Create a group with the given initial member.
-pub fn create_group(group_name: &str, member_discord_name: &str) {
+pub fn create_group(group_name: &str, member: &User) {
 	let groups: &mut HashMap<String, Group> = &mut GROUPS.lock().unwrap();
 	let mut new_group: Group = Group::new(group_name, "");
-	new_group.members.push(String::from(member_discord_name));
+	new_group.members.push(User::from(member));
 	groups.insert(
 		String::from(group_name),
 		new_group
