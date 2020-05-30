@@ -17,7 +17,8 @@ use serenity::{
 use commands::{
 	help::*,
 	ls::*,
-	ping::*
+	ping::*,
+	whoami::*
 };
 
 struct Handler;
@@ -36,7 +37,8 @@ impl EventHandler for Handler {
 #[commands(
 	help,
 	ls,
-	ping
+	ping,
+	whoami
 )]
 struct General;
 
