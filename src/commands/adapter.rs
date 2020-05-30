@@ -10,7 +10,7 @@ pub struct User {
 }
 impl User {
 	// constructor
-	fn new(discord_name: &str, description: &str) -> User {
+	pub fn new(discord_name: &str, description: &str) -> User {
 		User {
 			discord_name: String::from(discord_name),
 			description: String::from(description)
@@ -18,17 +18,17 @@ impl User {
 	}
 
 	// copy constructor
-	fn from(original: &User) -> User {
+	pub fn from(original: &User) -> User {
 		User::new(&original.discord_name[..], &original.description[..])
 	}
 
 	// Equals Method
-	fn equals(&self, other: &User) -> bool {
+	pub fn equals(&self, other: &User) -> bool {
 		other.discord_name == self.discord_name && other.description == self.description
 	}
 
 	// to_string method
-	fn to_string(&self) -> String {
+	pub fn to_string(&self) -> String {
 		format!("{}; description: {}", self.discord_name, self.description)
 	}
 }
@@ -41,7 +41,7 @@ pub struct Group {
 }
 impl Group {
 	// constructor
-	fn new(name: &str, description: &str) -> Group {
+	pub fn new(name: &str, description: &str) -> Group {
 		Group {
 			name: String::from(name),
 			description: String::from(description),
@@ -49,7 +49,7 @@ impl Group {
 		}
 	}
 	// copy constructor
-	fn from(original: &Group) -> Group {
+	pub fn from(original: &Group) -> Group {
 		let mut ret = Group::new(
 			&original.name[..],
 			&original.description[..]
@@ -61,12 +61,12 @@ impl Group {
 	}
 
 	// Add a User to an existing Group
-	fn add_member(&mut self, new_member: &User) {
+	pub fn add_member(&mut self, new_member: &User) {
 		self.members.push(User::from(new_member));
 	}
 
 	// Remove a User from an existing Group
-	fn remove_member(&mut self, member: &User) -> Option<User> {
+	pub fn remove_member(&mut self, member: &User) -> Option<User> {
 		for i in 0..self.members.len() {
 			if member.equals(&self.members[i]) {
 				return Some(self.members.swap_remove(i));
@@ -76,7 +76,7 @@ impl Group {
 	}
 
 	// to_string method
-	fn to_string(&self) -> String {
+	pub fn to_string(&self) -> String {
 		let mut ret: String = format!("{}; Description: {}", self.name, self.description);
 		for member in &self.members {
 			ret = format!("{}\n{}", ret, member.to_string());
