@@ -70,7 +70,7 @@ impl Group {
   	pub fn contains_member(&mut self, member: &User) -> Option<usize> {
 		for (i, e) in self.members.iter().enumerate() {
 			if member.equals(&e) {
-				return Some(i);
+				Some(i);
 			}
 		}
 		None
@@ -129,7 +129,23 @@ pub fn list_free_users() -> Vec<User> {
 	let mut v = Vec::new();
 	for u in USERS.lock().unwrap().iter() {
 		// TODO: Filter free users.
-		v.push(User::from(&u.1));
+		// Still WIP
+		let user = User::from(&u.1);
+		let mut is_free: bool = true;
+
+		for g in GROUPS.lock().unwrap().iter() {
+			match Group::from(&g.1).contains_member(&user) {
+				None => continue,
+				Some(x) => {
+					is_free = false;
+					break;
+				}
+			}
+		}
+
+		if is_free {
+			v.push(user);
+		}		
 	}
 	v
 }
