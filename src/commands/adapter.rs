@@ -6,30 +6,32 @@ use std::sync::Mutex;
 // User struct.
 pub struct User {
 	pub discord_name: String,   // discord name of the user
-	pub description: String // user description
+	pub description: String,	// user description
+	pub hash: u16
 }
 impl User {
 	// constructor
-	pub fn new(discord_name: &str, description: &str) -> User {
+	pub fn new(discord_name: &str, description: &str, hash: u16) -> User {
 		User {
 			discord_name: String::from(discord_name),
-			description: String::from(description)
+			description: String::from(description),
+			hash: hash
 		}
 	}
 
 	// copy constructor
 	pub fn from(original: &User) -> User {
-		User::new(&original.discord_name[..], &original.description[..])
+		User::new(&original.discord_name[..], &original.description[..], original.hash)
 	}
 
 	// Equals Method
 	pub fn equals(&self, other: &User) -> bool {
-		other.discord_name == self.discord_name && other.description == self.description
+		other.discord_name == self.discord_name && other.hash == self.hash
 	}
 
 	// to_string method
 	pub fn to_string(&self) -> String {
-		format!("{}; description: {}", self.discord_name, self.description)
+		format!("{}#{}; description: {}", self.discord_name, self.hash, self.description)
 	}
 }
 

@@ -7,9 +7,8 @@ use serenity::framework::standard::{
 
 #[command]
 pub fn whoami(ctx: &mut Context, msg: &Message) -> CommandResult {
-	//let _ = msg.reply(&ctx, format!("{:?}", "Test"));
-	let test_author = &msg.author;
-	let _ = msg.reply(&ctx, format!("Hi, you are {:?}!", test_author.name));
+	let user = &msg.author;
+	let _ = msg.reply(&ctx, format!("Hi, you are {}#{}!", user.name, user.discriminator));
 	let _ = msg.delete(&ctx);
 	Ok(())
 }

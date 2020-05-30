@@ -10,6 +10,7 @@ pub fn help(ctx: &mut Context, msg: &Message) -> CommandResult {
 	let help_message = "I can help you explore and join groups.
 	Following is the list of available commands.
 	`!help`: Show this message.
+	`!whoami`: See some info about you.
 	`!me`: Show my team building status.
 	`!ls groups`: List all groups.
 	`!ls free`: List all available users.
