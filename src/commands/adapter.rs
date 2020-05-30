@@ -124,6 +124,37 @@ pub fn list_groups() -> Vec<Group> {
 	v
 }
 
+// List all groups in the system.
+pub fn pos_of_group(group: &Group) -> Option<usize> {
+	pos_of_group_name(&group.name)
+}
+
+// List all groups in the system.
+pub fn pos_of_group_name(group_name: &str) -> Option<usize> {
+	for (i, (_string, g)) in GROUPS.lock().unwrap().iter().enumerate() {
+		if g.name == group_name {
+			return Some(i);
+		}
+	}
+	None
+}
+
+// Returns true, if the group is listed in the system
+pub fn contains_group(group: &Group) -> bool {
+	match pos_of_group(group) {
+		None => {false},
+		Some(x) => {true}
+	}
+}
+
+// Returns true, if the group is listed in the system
+pub fn contains_group_name(group_name: &str) -> bool {
+	match pos_of_group_name(group_name) {
+		None => {false},
+		Some(x) => {true}
+	}
+}
+
 // List all free (without group) users.
 pub fn list_free_users() -> Vec<User> {
 	let mut v = Vec::new();
