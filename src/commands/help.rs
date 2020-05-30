@@ -14,7 +14,7 @@ pub fn help(ctx: &mut Context, msg: &Message) -> CommandResult {
 	`!me`: Show my team building status.
 	`!ls groups`: List all groups.
 	`!ls free`: List all available users.
-	`!create <group_name>`: Create a group and join it.
+	`!create <group_name> <description>`: Create a group and join it.
 	`!join <group_name>`: Join an existing group.
 	`!merge <first_group_name> <second_group_name>`: Merge two groups.
 	`!describe <group_name>`: Show group summary.";
