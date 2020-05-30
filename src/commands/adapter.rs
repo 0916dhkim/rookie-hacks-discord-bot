@@ -65,14 +65,22 @@ impl Group {
 		self.members.push(User::from(new_member));
 	}
 
-	// Remove a User from an existing Group
-	fn remove_member(&mut self, member: &User) -> Option<User> {
-		for i in 0..self.members.len() {
-			if member.equals(&self.members[i]) {
-				return Some(self.members.swap_remove(i));
+	fn contains_member(&mut self, member: &User) -> Option<usize> {
+		for (i, e) in self.members.iter().enumerate() {
+			if member.equals(&e) {
+				return Some(i);
 			}
 		}
 		None
+	}
+
+	// Remove a User from an existing Group
+	fn remove_member(&mut self, member: &User) -> Option<User> {
+		let v = self.contains_member(member);
+		match v {
+			None => {None},
+			Some(x) => {Some(self.members.swap_remove(x))}
+		}
 	}
 
 	// to_string method
