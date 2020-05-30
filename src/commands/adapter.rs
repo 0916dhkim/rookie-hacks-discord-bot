@@ -135,9 +135,9 @@ pub fn list_free_users() -> Vec<User> {
 }
 
 // Create a group with the given initial member.
-pub fn create_group(group_name: &str, member: &User) {
+pub fn create_group(group_name: &str, group_description: &str, member: &User) {
 	let groups: &mut HashMap<String, Group> = &mut GROUPS.lock().unwrap();
-	let mut new_group: Group = Group::new(group_name, "");
+	let mut new_group: Group = Group::new(group_name, group_description);
 	new_group.members.push(User::from(member));
 	groups.insert(
 		String::from(group_name),
