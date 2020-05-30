@@ -23,7 +23,7 @@ mod tests {
 	fn basic_create_users_and_groups() {
 		// this tests the Constructs in adapter.rs 
 		// no methods were used
-		let alpha: User = User::new("Alpha", "First User");
+		let alpha: User = User::new("Alpha", "First User", 1);
 		assert_eq!("Alpha", alpha.discord_name);
 		assert_eq!("First User", alpha.description);
 
@@ -35,8 +35,21 @@ mod tests {
 
 		grp1.add_member(&alpha);
 		assert_eq!(1, grp1.members.len());
-
+		
+		/*
 		grp1.remove_member(&alpha);
 		assert_eq!(0, grp1.members.len());
+		*/
+	}
+
+	#[test]
+	fn listing_test() {
+		let alpha: User = User::new("Alpha", "First User", 1);
+		create_group("Group 1", "Group number 1", &alpha);
+		assert_eq!(1, list_groups().len());
+
+		let beta: User = User::new("Beta", "Second User", 2);
+		create_group("Group 2", "Group number 2", &beta);
+		assert_eq!(2, list_groups().len());
 	}
 }
