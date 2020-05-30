@@ -10,9 +10,12 @@ Cargo.lock
 **/*.rs.bk
 
 
-#Added by cargo
-
+# Added by cargo
 /target
 
 # Env file
 .env
+
+# VSCode folder
+# .vscode
+# Do we want this in the repository?
