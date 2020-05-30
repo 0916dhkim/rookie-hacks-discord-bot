@@ -165,10 +165,11 @@ pub fn list_groups() -> Vec<Group> {
 	v
 }
 
+// Get the group, in witch the member is currently
 pub fn group_of_member(user: &User) -> Option<Group> {
 	for (i, (_string, g)) in GROUPS.lock().unwrap().iter().enumerate() {
-		let mut group = (Group::from(&g));
-		if (group.contains_member(user)) {
+		let mut group = Group::from(&g);
+		if group.contains_member(user) {
 			return Some(group);
 		}
 	}
@@ -206,11 +207,16 @@ pub fn contains_group_name(group_name: &str) -> bool {
 	}
 }
 
+// Returns the Group, if it could be removed (and does so as well)
+pub fn remove_group(group: &Group) {
+	GROUPS.lock().unwrap().remove(&group.name);
+}
+
 // List all free (without group) users.
 pub fn list_free_users() -> Vec<User> {
 	let mut v = Vec::new();
 	for u in USERS.lock().unwrap().iter() {
-		// TODO: Filter free users.
+		// TODO: Filter free users. => Easy, use `group_of_member`, if None: free
 		// Still WIP
 		let user = User::from(&u.1);
 		let mut is_free: bool = true;
