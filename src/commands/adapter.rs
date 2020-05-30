@@ -29,9 +29,14 @@ impl User {
 		other.discord_name == self.discord_name && other.hash == self.hash
 	}
 
+	// to_string method, with description
+	pub fn to_string_with_description(&self) -> String {
+		format!("{}#{}; description: {}", self.discord_name, self.hash, self.description)
+	}
+
 	// to_string method
 	pub fn to_string(&self) -> String {
-		format!("{}#{}; description: {}", self.discord_name, self.hash, self.description)
+		format!("{}#{}", self.discord_name, self.hash)
 	}
 }
 
@@ -94,11 +99,28 @@ impl Group {
 		}
 	}
 
-	// to_string method
 	pub fn to_string(&self) -> String {
-		let mut ret: String = format!("{}; Description: {}", self.name, self.description);
+		let mut s: String = String::from("");
+		if self.description == "" {
+			s.push_str(format!("{}", self.name).as_str());
+		} else {
+			s.push_str(format!("{}: {}", self.name, self.description).as_str());
+		}
+		s.push_str(&format!(", {}/{}", self.num_members(), self.max_members()));
+		s
+	}
+
+	// to_string method
+	pub fn to_string_with_members(&self) -> String {
+		let mut ret: String = self.to_string();
+		let mut first: bool = true;
 		for member in &self.members {
-			ret = format!("{}\n{}", ret, member.to_string());
+			if !first {
+				ret = format!("{}, {}", ret, member.to_string());
+			} else {
+				ret = format!("{}\n{}", ret, member.to_string());
+				first = false;
+			}
 		}
 		ret
 	}

@@ -9,16 +9,16 @@ use serenity::framework::standard::{
 
 #[command]
 pub fn ls(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
-	let mut s: String = String::from("list of groups\n");
-	let g = list_groups();
-	for i in g.iter() {
-		if i.description == "" {
-			s.push_str(format!("{}", i.name).as_str());
-		} else {
-			s.push_str(format!("{}: {}", i.name, i.description).as_str());
+	let groups = list_groups();
+	if groups.len() == 0 {
+		let _ = msg.reply(&ctx, "There are currently no groups. Go on and create one!");
+	} else {
+		let mut ret: String = String::from("Groups:\n");
+		for group in groups.iter() {
+			ret.push_str(&group.to_string_with_members());
+			ret.push('\n');
 		}
-		s.push_str(&format!(", {}/{}", i.num_members(), i.max_members()));
+		let _ = msg.reply(&ctx, ret);
 	}
-	let _ = msg.reply(&ctx, s);
 	Ok(())
 }
