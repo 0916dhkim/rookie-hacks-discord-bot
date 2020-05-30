@@ -93,6 +93,16 @@ impl Group {
 		}
 		ret
 	}
+
+	// Get the number of members
+	pub fn num_members(&self) -> usize {
+		self.members.len()
+	}
+
+	// TODO Find a way to save this as a constant and to input it via command line
+	pub fn max_members(&self) -> i32 {
+		4
+	}
 }
 
 // Global variable for storing users.
