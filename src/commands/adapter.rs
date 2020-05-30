@@ -33,14 +33,9 @@ impl User {
 // use like this: groups.lock().unwrap()
 lazy_static! {
     static ref GROUPS: Mutex<HashMap<String, Group>> = {
-        Mutex::new({
-            let mut m = HashMap::new();
-            m.insert(String::from("b"), Group{name: String::from("b")});
-            m.insert(String::from("c"), Group{name: String::from("c")});
-            m.insert(String::from("d"), Group{name: String::from("d")});
-            m.insert(String::from("e"), Group{name: String::from("e")});
-            m
-        })
+        Mutex::new(
+            HashMap::new()
+        )
     };
 }
 
