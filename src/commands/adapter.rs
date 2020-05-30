@@ -16,9 +16,20 @@ impl User {
 			description: String::from(description)
 		}
 	}
+
 	// copy constructor
 	fn from(original: &User) -> User {
 		User::new(&original.discord_name[..], &original.description[..])
+	}
+
+	// Equals Method
+	fn equals(&self, other: &User) -> bool {
+		other.discord_name == self.discord_name && other.description == self.description
+	}
+
+	// to_string method
+	fn to_string(&self) -> String {
+		format!("{}; description: {}", self.discord_name, self.description)
 	}
 }
 
@@ -44,7 +55,31 @@ impl Group {
 			&original.description[..]
 		);
 		for member in original.members.as_slice() {
-			ret.members.push(User::from(member));
+			ret.add_member(member);
+		}
+		ret
+	}
+
+	// Add a User to an existing Group
+	fn add_member(&mut self, new_member: &User) {
+		self.members.push(User::from(new_member));
+	}
+
+	// Remove a User from an existing Group
+	fn remove_member(&mut self, member: &User) -> Option<User> {
+		for i in 0..self.members.len() {
+			if member.equals(&self.members[i]) {
+				return Some(self.members.swap_remove(i));
+			}
+		}
+		None
+	}
+
+	// to_string method
+	fn to_string(&self) -> String {
+		let mut ret: String = format!("{}; Description: {}", self.name, self.description);
+		for member in &self.members {
+			ret = format!("{}\n{}", ret, member.to_string());
 		}
 		ret
 	}
