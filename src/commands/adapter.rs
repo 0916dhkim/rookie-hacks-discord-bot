@@ -88,3 +88,14 @@ pub fn list_free_users() -> Vec<User> {
 	}
 	v
 }
+
+// Create a group with the given initial member.
+pub fn create_group(group_name: &str, member_discord_name: &str) {
+	let groups: &mut HashMap<String, Group> = &mut GROUPS.lock().unwrap();
+	let mut new_group: Group = Group::new(group_name, "");
+	new_group.members.push(String::from(member_discord_name));
+	groups.insert(
+		String::from(group_name),
+		new_group
+	);
+}
