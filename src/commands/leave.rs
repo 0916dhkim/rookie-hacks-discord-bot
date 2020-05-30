@@ -17,10 +17,13 @@ pub fn leave(ctx: &mut Context, msg: &Message) -> CommandResult {
 		None => {
 			let _ = msg.reply(&ctx, "You can't leave a group, since you are in no group yet!");
 		},
-		Some(group) => {
+		Some(mut group) => {
 			let _ = msg.reply(&ctx, format!("Leaving group {}", group.to_string_with_members()));
 			if group.num_members() <= 1 {
 				remove_group(&group);
+			} else {
+				// TODO: This may be problematic. I think, I am just removing the user from tho local variable
+				group.remove_member(&user);
 			}
 		}
 	}

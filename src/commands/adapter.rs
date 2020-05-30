@@ -86,7 +86,7 @@ impl Group {
 	pub fn contains_member(&mut self, member: &User) -> bool {
 		match self.pos_of_member(member) {
 			None => {false},
-			Some(x) => {true}
+			Some(_) => {true}
 		}
 	}
 
@@ -167,7 +167,7 @@ pub fn list_groups() -> Vec<Group> {
 
 // Get the group, in witch the member is currently
 pub fn group_of_member(user: &User) -> Option<Group> {
-	for (i, (_string, g)) in GROUPS.lock().unwrap().iter().enumerate() {
+	for (_, (_string, g)) in GROUPS.lock().unwrap().iter().enumerate() {
 		let mut group = Group::from(&g);
 		if group.contains_member(user) {
 			return Some(group);
@@ -195,7 +195,7 @@ pub fn pos_of_group_name(group_name: &str) -> Option<usize> {
 pub fn contains_group(group: &Group) -> bool {
 	match pos_of_group(group) {
 		None => {false},
-		Some(x) => {true}
+		Some(_) => {true}
 	}
 }
 
@@ -203,7 +203,7 @@ pub fn contains_group(group: &Group) -> bool {
 pub fn contains_group_name(group_name: &str) -> bool {
 	match pos_of_group_name(group_name) {
 		None => {false},
-		Some(x) => {true}
+		Some(_) => {true}
 	}
 }
 
