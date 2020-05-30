@@ -3,40 +3,51 @@
 use std::collections::HashMap;
 use std::sync::Mutex;
 
-// Group struct.
-pub struct Group {
-    // TODO: Define group structure.
-    pub name: String
-}
-impl Group {
-    fn from(original: &Group) -> Group {
-        return Group {
-            name: String::from(&original.name)
-        };
-    }
-}
-
 // User struct.
 pub struct User {
-    // TODO: Define user structure.
-    pub discord_name: String
+    pub discord_name: String,   // discord name of the user
+    pub description: String // user description
 }
 impl User {
-    fn from(original: &User) -> User {
+    // constructor
+    fn new(discord_name: &str, description: &str) -> User {
         User {
-            discord_name: String::from(&original.discord_name)
+            discord_name: String::from(discord_name),
+            description: String::from(description)
         }
+    }
+    // copy constructor
+    fn from(original: &User) -> User {
+        User::new(&original.discord_name[..], &original.description[..])
     }
 }
 
-// Global variable for storing groups.
-// use like this: groups.lock().unwrap()
-lazy_static! {
-    static ref GROUPS: Mutex<HashMap<String, Group>> = {
-        Mutex::new(
-            HashMap::new()
-        )
-    };
+// Group struct.
+pub struct Group {
+    pub name: String,   // name of the group
+    pub description: String,    // group description
+    pub members: Vec<String>    // group member discord names
+}
+impl Group {
+    // constructor
+    fn new(name: &str, description: &str) -> Group {
+        Group {
+            name: String::from(name),
+            description: String::from(description),
+            members: Vec::new() // 0 members by default.
+        }
+    }
+    // copy constructor
+    fn from(original: &Group) -> Group {
+        let mut ret = Group::new(
+            &original.name[..],
+            &original.description[..]
+        );
+        for member in original.members.as_slice() {
+            ret.members.push(String::from(member));
+        }
+        ret
+    }
 }
 
 // Global variable for storing users.
@@ -49,6 +60,15 @@ lazy_static! {
     };
 }
 
+// Global variable for storing groups.
+// use like this: groups.lock().unwrap()
+lazy_static! {
+    static ref GROUPS: Mutex<HashMap<String, Group>> = {
+        Mutex::new(
+            HashMap::new()
+        )
+    };
+}
 
 // List all groups in the system.
 pub fn list_groups() -> Vec<Group> {
