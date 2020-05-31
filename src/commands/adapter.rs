@@ -303,6 +303,20 @@ pub fn unapply_for_group(member: &User, group: &Group) {
 	}
 }
 
+// Show your current application
+// show vector length 0 if user has not applied for a group (I'm sorry this is bad)
+pub fn show_current_application(member: &User) -> Vec<String> {
+	let mut applicants = APPLICANTS.lock().unwrap();
+	let key = &member.to_string();
+
+	match applicants.get(key) {
+		None => {Vec::new()}, // APPLICANT does not have user's string
+		Some(x) => { // APPLICANT has user's string
+			x.to_vec()
+		}
+	}
+}
+
 // Straight up remove the entry
 pub fn clear_all_applications_from_user(member: &User) {
 	APPLICANTS.lock().unwrap().remove(&member.to_string());

@@ -63,4 +63,29 @@ mod tests {
 		assert_eq!(1, list_free_users().len());
 		assert_eq!(2, list_groups().len());
 	}
+
+	#[test]
+	fn applicants_test() {
+		// 4 users
+		let alpha: User = User::new("Alpha", "First User", 1);
+		let beta: User = User::new("Beta", "Second User", 2);
+		let gamma: User = User::new("Gamma", "Third User", 3);
+		let delta: User = User::new("Delta", "Fourth User",  4);
+		
+		// 2 groups
+		let mut grp1: Group = Group::new("Group 1", "Group number 1");
+		grp1.add_member(&alpha);
+		let mut grp2: Group = Group::new("Group 2", "Group number 2");
+		grp2.add_member(&beta);
+
+		apply_for_group(&gamma, &grp1);
+		apply_for_group(&gamma, &grp2);
+		assert_eq!(2, show_current_application(&gamma).len());
+
+		unapply_for_group(&gamma, &grp1);
+		assert_eq!(1, show_current_application(&gamma).len());
+
+		clear_all_applications_from_user(&gamma);
+		assert_eq!(0, show_current_application(&gamma).len());
+	}
 }
