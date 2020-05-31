@@ -228,10 +228,10 @@ pub fn remove_group(group: &Group) {
 // true if user is already checked in
 pub fn user_checkin(member: &User) -> bool {
 	let users: &mut HashMap<String, User> = &mut USERS.lock().unwrap();
-	let flag: bool = users.contains_key(&member.discord_name);
+	let flag: bool = users.contains_key(&member.to_string());
 	if !flag {
 		users.insert(
-			String::from(&member.discord_name),
+			String::from(&member.to_string()),
 			User::from(member),
 		);
 	}
@@ -271,10 +271,11 @@ pub fn create_group(group_name: &str, group_description: &str, member: &User) {
 }
 
 // Apply for a group.
-pub fn apply_for_group(member: &User, group: &Group) {
+pub fn apply_for_group(member: &User, group: &Group) -> bool {
 	let mut applicants = APPLICANTS.lock().unwrap();
 	let key = &member.to_string();
 	let value_element = &group.name;
+	let mut flag: bool = true;
 
 	match applicants.get_mut(key) {
 		None => { // APPLICANT does not have user's string
@@ -284,9 +285,19 @@ pub fn apply_for_group(member: &User, group: &Group) {
 			);
 		},
 		Some(x) => { // APPLICANT has user's string
-			x.push(String::from(value_element));
+			let placeholder: Vec<String> = x.to_vec();
+			for elements in placeholder {
+				if elements == value_element.to_string() {
+					flag = false;
+				}
+			}
+			if flag {
+				x.push(String::from(value_element));
+			}
 		}
 	}
+
+	flag
 }
 
 // Unapply for a group
