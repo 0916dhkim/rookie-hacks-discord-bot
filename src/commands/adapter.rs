@@ -137,7 +137,7 @@ impl Group {
 }
 
 // Global variable for storing users.
-// use like this: users.lock().unwrap()
+// use like this: USERS.lock().unwrap()
 lazy_static! {
 	static ref USERS: Mutex<HashMap<String, User>> = {
 		Mutex::new(
@@ -147,9 +147,21 @@ lazy_static! {
 }
 
 // Global variable for storing groups.
-// use like this: groups.lock().unwrap()
+// use like this: GROUPS.lock().unwrap()
 lazy_static! {
 	static ref GROUPS: Mutex<HashMap<String, Group>> = {
+		Mutex::new(
+			HashMap::new()
+		)
+	};
+}
+
+// Global variables for group application state.
+// Key = discord_name + "#" + discord_hash
+// Value = Vector of group names
+// use like this APPLICANTS.lock().unwrap()
+lazy_static! {
+	static ref APPLICANTS: Mutex<HashMap<String, Vec<String>>> = {
 		Mutex::new(
 			HashMap::new()
 		)
