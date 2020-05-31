@@ -28,7 +28,6 @@ pub fn create(ctx: &mut Context, msg: &Message) -> CommandResult {
 						let user = User::new(&user_out.name, "", user_out.discriminator);
 						create_group(&group_name, &group_description, &user);
 						if group_description != "" {
-							// TODO: Place fix with "group_description" here
 							let _ = msg.reply(&ctx, format!("User '{}' created group '{}' with the description '{}'", user_out.name, group_name, group_description));
 						} else {
 							let _ = msg.reply(&ctx, format!("User '{}' created group '{}'\n -> You should provide a group description, so that other users know, what you are about!",
