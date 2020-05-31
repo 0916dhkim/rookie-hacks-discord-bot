@@ -224,6 +224,15 @@ pub fn remove_group(group: &Group) {
 	GROUPS.lock().unwrap().remove(&group.name);
 }
 
+// Check-in the user. Solely for list_free_users method
+pub fn user_checkin(member: &User) {
+	let users: &mut HashMap<String, User> = &mut USERS.lock().unwrap();
+	users.insert(
+		String::from(&member.discord_name),
+		User::from(member),
+	);
+}
+
 // List all free (without group) users.
 pub fn list_free_users() -> Vec<User> {
 	let mut v = Vec::new();
