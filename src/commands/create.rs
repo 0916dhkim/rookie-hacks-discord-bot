@@ -57,38 +57,16 @@ fn parse_message(msg: &Message) -> Option<(String, String)> {
 		i += 1;
 		if i == 0 {
 			continue;
-		} else if i > 2 {
-			break;
 		} else if i == 1 {
 			group_name = String::from(s);
 		} else if i == 2 {
-			group_description = String::from(s);
+			group_description.push_str(&String::from(s));
+		} else if i > 2 {
+			group_description.push_str(&format!(" {}", String::from(s)));
 		}
 	}
 	if i < 1 {
 		return None;
 	}
 	Some((group_name, group_description))
-}
-
-// TODO: provide means to detect and prevent Code injection when storing data persistently!
-fn parse_group_name(msg: &Message) -> Option<String> {
-	let message_text = &msg.content;
-	let split = message_text.split(" ");
-	let mut i = -1;
-	let mut name: String = String::from("");
-	for s in split {
-		i += 1;
-		if i == 0 {
-			continue;
-		} else if i > 1 {
-			break;
-		} else if i == 1 {
-			name = String::from(s);
-		}
-	}
-	if i < 1 {
-		return None;
-	}
-	Some(name)
 }
