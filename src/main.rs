@@ -20,7 +20,9 @@ use commands::{
 	ping::*,
 	whoami::*,
 	create::*,
-	leave::*
+	leave::*,
+	checkin::*,
+	ls_free::*
 };
 
 struct Handler;
@@ -42,7 +44,9 @@ impl EventHandler for Handler {
 	ping,
 	whoami,
 	create,
-	leave
+	leave,
+	checkin,
+	ls_free
 )]
 struct General;
 

@@ -177,7 +177,7 @@ pub fn list_groups() -> Vec<Group> {
 	v
 }
 
-// Get the group, in witch the member is currently
+// Get the group where the member belongs to
 pub fn group_of_member(user: &User) -> Option<Group> {
 	for (_, (_string, g)) in GROUPS.lock().unwrap().iter().enumerate() {
 		let mut group = Group::from(&g);
@@ -225,20 +225,23 @@ pub fn remove_group(group: &Group) {
 }
 
 // Check-in the user. Solely for list_free_users method
-pub fn user_checkin(member: &User) {
+// true if user is already checked in
+pub fn user_checkin(member: &User) -> bool {
 	let users: &mut HashMap<String, User> = &mut USERS.lock().unwrap();
-	users.insert(
-		String::from(&member.discord_name),
-		User::from(member),
-	);
+	let flag: bool = users.contains_key(&member.discord_name);
+	if !flag {
+		users.insert(
+			String::from(&member.discord_name),
+			User::from(member),
+		);
+	}
+	flag
 }
 
 // List all free (without group) users.
 pub fn list_free_users() -> Vec<User> {
 	let mut v = Vec::new();
 	for u in USERS.lock().unwrap().iter() {
-		// TODO: Filter free users. => Easy, use `group_of_member`, if None: free
-		// Still WIP
 		let user = User::from(&u.1);
 		let mut is_free: bool = true;
 
@@ -265,4 +268,42 @@ pub fn create_group(group_name: &str, group_description: &str, member: &User) {
 		String::from(group_name),
 		new_group
 	);
+}
+
+// Apply for a group.
+pub fn apply_for_group(member: &User, group: &Group) {
+	let mut applicants = APPLICANTS.lock().unwrap();
+	let key = &member.to_string();
+	let value_element = &group.name;
+
+	match applicants.get_mut(key) {
+		None => { // APPLICANT does not have user's string
+			applicants.insert(
+				String::from(key),
+				vec![String::from(value_element)]
+			);
+		},
+		Some(x) => { // APPLICANT has user's string
+			x.push(String::from(value_element));
+		}
+	}
+}
+
+// Unapply for a group
+pub fn unapply_for_group(member: &User, group: &Group) {
+	let mut applicants = APPLICANTS.lock().unwrap();
+	let key = &member.to_string();
+	let value_element = &group.name;
+
+	match applicants.get_mut(key) {
+		None => {	}, // APPLICANT does not have user's string
+		Some(x) => { // APPLICANT has user's string
+			x.retain(|x| *x == String::from(value_element));
+		}
+	}
+}
+
+// Straight up remove the entry
+pub fn clear_all_applications_from_user(member: &User) {
+	APPLICANTS.lock().unwrap().remove(&member.to_string());
 }
