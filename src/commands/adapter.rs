@@ -337,3 +337,17 @@ pub fn clear_all_applications_from_user(member: &User) {
 pub fn accept_member(group_name: &str, user_str: &str) -> bool {
 	true
 }
+
+// Returns a list of all User names, that apply for the group
+pub fn list_applicants_for_group(group_name: &str) -> Vec<String> {
+	let mut ret: Vec<String> = Vec::new();
+	for (applicant, groups) in APPLICANTS.lock().unwrap().iter() {
+		for group in groups {
+			if group == group_name {
+				ret.push(String::from(applicant));
+				break;			// TODO: Might be problematic
+			}
+		}
+	}
+	ret
+}

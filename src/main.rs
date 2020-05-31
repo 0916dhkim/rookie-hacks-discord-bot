@@ -22,7 +22,8 @@ use commands::{
 	create::*,
 	leave::*,
 	checkin::*,
-	ls_free::*
+	ls_free::*,
+	accept::*
 };
 
 struct Handler;
@@ -46,7 +47,8 @@ impl EventHandler for Handler {
 	create,
 	leave,
 	checkin,
-	ls_free
+	ls_free,
+	accept
 )]
 struct General;
 
