@@ -5,14 +5,14 @@ mod commands;
 
 // Pool of test users for reference
 /*
-let alpha: User = User::new("Alpha", "First User");
-let beta: User = User::new("Beta", "Second User");
-let gamma: User = User::new("Gamma", "Third User");
-let delta: User = User::new("Delta", "Fourth User");
-let epsilon: User = User::new("Epsilon", "Fifth User");
-let zeta: User = User::new("Zeta", "Sixth User");
-let eta: User = User::new("Eta", "Seventh User");
-let theta: User = User::new("Theta", "Eighth User");
+let alpha: User = User::new("Alpha", "First User", 1);
+let beta: User = User::new("Beta", "Second User", 2);
+let gamma: User = User::new("Gamma", "Third User", 3);
+let delta: User = User::new("Delta", "Fourth User",  4);
+let epsilon: User = User::new("Epsilon", "Fifth User", 5);
+let zeta: User = User::new("Zeta", "Sixth User", 6);
+let eta: User = User::new("Eta", "Seventh User", 7);
+let theta: User = User::new("Theta", "Eighth User", 8);
 */
 
 #[cfg(test)]
@@ -36,20 +36,31 @@ mod tests {
 		grp1.add_member(&alpha);
 		assert_eq!(1, grp1.members.len());
 		
-		/*
+		
 		grp1.remove_member(&alpha);
-		assert_eq!(0, grp1.members.len());
-		*/
+		assert_eq!(0, grp1.members.len());		
 	}
 
 	#[test]
 	fn listing_test() {
 		let alpha: User = User::new("Alpha", "First User", 1);
-		create_group("Group 1", "Group number 1", &alpha);
-		assert_eq!(1, list_groups().len());
+
+		user_checkin(&alpha);
+		assert_eq!(1, list_free_users().len());
 
 		let beta: User = User::new("Beta", "Second User", 2);
+		let gamma: User = User::new("Gamma", "Third User", 3);
+
+		user_checkin(&beta);
+		user_checkin(&gamma);
+		assert_eq!(3, list_free_users().len());
+
+		create_group("Group 1", "Group number 1", &alpha);
+		assert_eq!(2, list_free_users().len());
+		assert_eq!(1, list_groups().len());
+
 		create_group("Group 2", "Group number 2", &beta);
+		assert_eq!(1, list_free_users().len());
 		assert_eq!(2, list_groups().len());
 	}
 }
