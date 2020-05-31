@@ -13,6 +13,7 @@ use serenity::framework::standard::{
 pub fn accept(ctx: &mut Context, msg: &Message) -> CommandResult {
 	// let user_name = format!("{}#{}", &msg.author.name, &msg.author.discriminator);
 	let user = User::new(&msg.author.name, "", msg.author.discriminator);
+	// let _ = msg.reply(&ctx, format!("DEBUG: {}", user.to_string()));
 	let users_group = group_of_member(&user);
 	match users_group {
 		None => {
@@ -46,7 +47,8 @@ pub fn accept(ctx: &mut Context, msg: &Message) -> CommandResult {
 					}
 				}
 				if to_accept != "" {
-					accept_member(&group.name, &to_accept);
+					accept_member(&group, &to_accept);
+					// let _ = msg.reply(&ctx, format!("DEBUG: {}", accept_member(&group, &to_accept)));
 				}
 			}
 		}

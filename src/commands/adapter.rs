@@ -130,9 +130,14 @@ impl Group {
 		self.members.len()
 	}
 
-	// TODO Find a way to save this as a constant and to input it via command line
+	// TODO: Find a way to save this as a constant and to input it via command line
 	pub fn max_members(&self) -> i32 {
 		4
+	}
+
+	// TODO: Shitty last minute code
+	pub fn is_full(&self) -> bool {
+		self.num_members() == 4
 	}
 }
 
@@ -280,6 +285,15 @@ pub fn create_group(group_name: &str, group_description: &str, member: &User) {
 	);
 }
 
+// Create a group with the given initial member.
+pub fn create_group_existing(group: &Group) {
+	let groups: &mut HashMap<String, Group> = &mut GROUPS.lock().unwrap();
+	groups.insert(
+		String::from(String::from(&group.name)),
+		Group::from(group)
+	);
+}
+
 // Apply for a group with name.
 pub fn apply_for_group_name(member: &User, group_name: &str) -> bool {
 	let mut applicants = APPLICANTS.lock().unwrap();
@@ -348,31 +362,57 @@ pub fn clear_all_applications_from_user(member: &User) {
 }
 
 // Accept a member
-pub fn accept_member(group_name: &str, user_str: &str) -> bool {
-	let mut group_options = GROUPS.lock().unwrap();
-	let group = match group_options.get_mut(group_name) {
-		None => {return false;}, // return false if group not found
-		Some(x) => {x}
-	};
-	let mut user_options = USERS.lock().unwrap();
-	let user = match user_options.get_mut(user_str) {
-		None => {return false;}, // return false if user not found
-		Some(y) => {y}
-	};
-	match APPLICANTS.lock().unwrap().get_mut(user_str) {
-		None => {false}, // return false if user not applied in general
-		Some(z) => {
-			let placeholder: Vec<String> = z.to_vec();
-			for element in placeholder {
-				if element == group_name {
-					group.add_member(user);
-					clear_all_applications_from_user(user);
-					true;
-				}
-			}
-			false // return false if user not applied to this group
+pub fn accept_member(group: &Group, user_str: &str) -> String {
+	let mut group = Group::from(&group);
+	/*if !contains_group_name(group_name) {
+		return String::from("This group does not exist.");
+	}*/
+	let split = user_str.split("#");
+	let mut i: i32 = -1;
+	let mut name = String::from("");
+	let mut hash: u16 = 0;
+	for s in split {
+		i += 1;
+		if i == 0 {
+			name = String::from(s);
+		} else if i > 1 {
+			break;
+		} else if i == 1 {
+			hash = s.parse::<u16>().unwrap();
 		}
 	}
+	let user = User::new(&name, "", hash);
+	/*match group_of_member(&user) {
+		None => {
+			return String::from("You are in no group. Therefore you can't accept members.");
+		},
+		Some(mut group) => {*/
+	if group.is_full() {
+		return String::from("Your group is already full. You can't accept further members.");
+	}
+	group.add_member(&user);
+	remove_group(&group);
+	create_group_existing(&group);
+	clear_all_applications_from_user(&user);
+	String::from("All fine!")
+}
+
+// Remove a member
+pub fn remove_member(group_name: &str, user: &User) -> String {
+	if !contains_group_name(group_name) {
+		return String::from("This group does not exist.");
+	}
+	match group_of_member(&user) {
+		None => {
+			return String::from("You are in no group. Therefore you can't be removed.");
+		},
+		Some(mut group) => {
+			&group.remove_member(&user);
+			remove_group(&group);
+			create_group_existing(&group);
+		}
+	}
+	String::from("All fine!")
 }
 
 // Returns a list of all User names, that apply for the group
