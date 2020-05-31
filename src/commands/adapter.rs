@@ -333,9 +333,32 @@ pub fn clear_all_applications_from_user(member: &User) {
 	APPLICANTS.lock().unwrap().remove(&member.to_string());
 }
 
-// Apply for a group.
+// Accept a member
 pub fn accept_member(group_name: &str, user_str: &str) -> bool {
-	true
+	let mut group_options = GROUPS.lock().unwrap();
+	let group = match group_options.get_mut(group_name) {
+		None => {return false;}, // return false if group not found
+		Some(x) => {x}
+	};
+	let mut user_options = USERS.lock().unwrap();
+	let user = match user_options.get_mut(user_str) {
+		None => {return false;}, // return false if user not found
+		Some(y) => {y}
+	};
+	match APPLICANTS.lock().unwrap().get_mut(user_str) {
+		None => {false}, // return false if user not applied in general
+		Some(z) => {
+			let placeholder: Vec<String> = z.to_vec();
+			for element in placeholder {
+				if element == group_name {
+					group.add_member(user);
+					clear_all_applications_from_user(user);
+					true;
+				}
+			}
+			false // return false if user not applied to this group
+		}
+	}
 }
 
 // Returns a list of all User names, that apply for the group
