@@ -1,4 +1,5 @@
 use crate::commands::adapter::group_description_of_group_name;
+use crate::commands::adapter::group_of_group_name;
 use serenity::prelude::*;
 use serenity::model::prelude::*;
 use serenity::framework::standard::{
@@ -25,6 +26,18 @@ pub fn describe(ctx: &mut Context, msg: &Message) -> CommandResult {
 					} else {
 						let _ = msg.reply(&ctx, "Sadly, this group has no description :/");
 					}
+					let mut ret = String::from(format!("Users of group '{}':\n", group_name));
+					match group_of_group_name(&group_name) {
+						None => {
+							ret.push_str("No Users!");
+						},
+						Some(group) => {
+							for user in group.members {
+								ret.push_str(&user.to_string_with_description());
+							}
+						}
+					}
+					let _ = msg.reply(&ctx, ret);
 				}
 			}
 		}

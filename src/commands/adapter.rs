@@ -31,7 +31,10 @@ impl User {
 
 	// to_string method, with description
 	pub fn to_string_with_description(&self) -> String {
-		format!("{}#{}; description: {}", self.discord_name, self.hash, self.description)
+		if self.description != "" {
+			return format!("{}#{}; description: {}", self.discord_name, self.hash, self.description)
+		}
+		self.to_string()
 	}
 
 	// to_string method
@@ -213,6 +216,16 @@ pub fn group_description_of_group_name(group_name: &str) -> Option<String> {
 	for (i, (_string, g)) in GROUPS.lock().unwrap().iter().enumerate() {
 		if g.name == group_name {
 			return Some(String::from(&g.description));
+		}
+	}
+	None
+}
+
+// List all groups in the system.
+pub fn group_of_group_name(group_name: &str) -> Option<Group> {
+	for (i, (_string, g)) in GROUPS.lock().unwrap().iter().enumerate() {
+		if g.name == group_name {
+			return Some(Group::from(&g));
 		}
 	}
 	None
