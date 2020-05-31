@@ -270,11 +270,11 @@ pub fn create_group(group_name: &str, group_description: &str, member: &User) {
 	);
 }
 
-// Apply for a group.
-pub fn apply_for_group(member: &User, group: &Group) -> bool {
+// Apply for a group with name.
+pub fn apply_for_group_name(member: &User, group_name: &str) -> bool {
 	let mut applicants = APPLICANTS.lock().unwrap();
 	let key = &member.to_string();
-	let value_element = &group.name;
+	let value_element = group_name;
 	let mut flag: bool = true;
 
 	match applicants.get_mut(key) {
@@ -296,8 +296,12 @@ pub fn apply_for_group(member: &User, group: &Group) -> bool {
 			}
 		}
 	}
-
 	flag
+}
+
+// Apply for a group.
+pub fn apply_for_group(member: &User, group: &Group) -> bool {
+	apply_for_group_name(member, &group.name)
 }
 
 // Unapply for a group

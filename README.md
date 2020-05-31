@@ -26,6 +26,7 @@ If you want to define a new command named "mycommand", you need to do the follow
 	#[command]
 	pub fn mycommand(ctx: &mut Context, msg: &Message) -> CommandResult {
 		let _ = msg.reply(&ctx, "pong!");
+		let _ = msg.delete(&ctx);
 		Ok(())
 	}
 	```

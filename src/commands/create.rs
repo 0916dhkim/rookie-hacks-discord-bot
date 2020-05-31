@@ -1,6 +1,7 @@
 use crate::commands::adapter::create_group;
 use crate::commands::adapter::contains_group_name;
 use crate::commands::adapter::User;
+use crate::commands::adapter::group_of_member;
 use serenity::prelude::*;
 use serenity::model::prelude::*;
 use serenity::framework::standard::{
@@ -11,24 +12,33 @@ use serenity::framework::standard::{
 #[command]
 pub fn create(ctx: &mut Context, msg: &Message) -> CommandResult {
 	let user_out = &msg.author;
-	let parsed_message = parse_message(msg);
-	match parsed_message {
+	let user_test = User::new(&user_out.name, "", user_out.discriminator);
+	let users_group = group_of_member(&user_test);
+	match users_group {
 		None => {
-			let _ = msg.reply(&ctx, "You need to provide a group name!");
-		},
-		Some((group_name, group_description)) => {
-			if contains_group_name(&group_name) {
-				let _ = msg.reply(&ctx, "Sadly, a group with this name already exists...\nPlease choose another name!");
-			} else {
-				let user = User::new(&user_out.name, "", user_out.discriminator);
-				create_group(&group_name, &group_description, &user);
-				if group_description != "" {
-					let _ = msg.reply(&ctx, format!("User '{}' created group '{}' with the description '{}'", user_out.name, group_name, group_description));
-				} else {
-					let _ = msg.reply(&ctx, format!("User '{}' created group '{}'\n -> You should provide a group name, so that other users know, what you are about!",
-						user_out.name, group_name));
+			let parsed_message = parse_message(msg);
+			match parsed_message {
+				None => {
+					let _ = msg.reply(&ctx, "You need to provide a group name!");
+				},
+				Some((group_name, group_description)) => {
+					if contains_group_name(&group_name) {
+						let _ = msg.reply(&ctx, "Sadly, a group with this name already exists...\nPlease choose another name!");
+					} else {
+						let user = User::new(&user_out.name, "", user_out.discriminator);
+						create_group(&group_name, &group_description, &user);
+						if group_description != "" {
+							let _ = msg.reply(&ctx, format!("User '{}' created group '{}' with the description '{}'", user_out.name, group_name, group_description));
+						} else {
+							let _ = msg.reply(&ctx, format!("User '{}' created group '{}'\n -> You should provide a group description, so that other users know, what you are about!",
+								user_out.name, group_name));
+						}
+					}
 				}
 			}
+		},
+		Some(group) => {
+			let _ = msg.reply(&ctx, format!("You are already in a group: {}. Leave it to apply for another one.", group.name));
 		}
 	}
 	let _ = msg.delete(&ctx);
