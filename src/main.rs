@@ -24,7 +24,8 @@ use commands::{
 	checkin::*,
 	ls_free::*,
 	accept::*,
-	apply::*
+	apply::*,
+	describe::*
 };
 
 struct Handler;
@@ -50,7 +51,8 @@ impl EventHandler for Handler {
 	checkin,
 	ls_free,
 	accept,
-	apply
+	apply,
+	describe
 )]
 struct General;
 

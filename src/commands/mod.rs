@@ -9,3 +9,4 @@ pub mod checkin;
 pub mod ls_free;
 pub mod accept;
 pub mod apply;
+pub mod describe;

@@ -203,6 +203,16 @@ pub fn pos_of_group_name(group_name: &str) -> Option<usize> {
 	None
 }
 
+// List all groups in the system.
+pub fn group_description_of_group_name(group_name: &str) -> Option<String> {
+	for (i, (_string, g)) in GROUPS.lock().unwrap().iter().enumerate() {
+		if g.name == group_name {
+			return Some(String::from(&g.description));
+		}
+	}
+	None
+}
+
 // Returns true, if the group is listed in the system
 pub fn contains_group(group: &Group) -> bool {
 	match pos_of_group(group) {
