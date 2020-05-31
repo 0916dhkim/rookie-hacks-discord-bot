@@ -2,6 +2,7 @@ use crate::commands::adapter::group_of_member;
 use crate::commands::adapter::remove_group;
 use crate::commands::adapter::remove_member;
 use crate::commands::adapter::User;
+use crate::commands::adapter::user_description;
 use serenity::prelude::*;
 use serenity::model::prelude::*;
 use serenity::framework::standard::{
@@ -12,7 +13,7 @@ use serenity::framework::standard::{
 #[command]
 pub fn leave(ctx: &mut Context, msg: &Message) -> CommandResult {
 	let user_out = &msg.author;
-	let user = User::new(&user_out.name, "", user_out.discriminator);
+	let user = User::new(&user_out.name, &user_description(&user_out.name), user_out.discriminator);
 	let group_opt = group_of_member(&user);
 	match group_opt {
 		None => {

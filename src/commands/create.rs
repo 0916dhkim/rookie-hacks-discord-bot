@@ -2,6 +2,7 @@ use crate::commands::adapter::create_group;
 use crate::commands::adapter::contains_group_name;
 use crate::commands::adapter::User;
 use crate::commands::adapter::group_of_member;
+use crate::commands::adapter::user_description;
 use serenity::prelude::*;
 use serenity::model::prelude::*;
 use serenity::framework::standard::{
@@ -12,7 +13,7 @@ use serenity::framework::standard::{
 #[command]
 pub fn create(ctx: &mut Context, msg: &Message) -> CommandResult {
 	let user_out = &msg.author;
-	let user_test = User::new(&user_out.name, "", user_out.discriminator);
+	let user_test = User::new(&user_out.name, &user_description(&user_out.name), user_out.discriminator);
 	let users_group = group_of_member(&user_test);
 	match users_group {
 		None => {
@@ -25,7 +26,7 @@ pub fn create(ctx: &mut Context, msg: &Message) -> CommandResult {
 					if contains_group_name(&group_name) {
 						let _ = msg.reply(&ctx, "Sadly, a group with this name already exists...\nPlease choose another name!");
 					} else {
-						let user = User::new(&user_out.name, "", user_out.discriminator);
+						let user = User::new(&user_out.name, &user_description(&user_out.name), user_out.discriminator);
 						create_group(&group_name, &group_description, &user);
 						if group_description != "" {
 							let _ = msg.reply(&ctx, format!("User '{}' created group '{}' with the description '{}'", user_out.name, group_name, group_description));

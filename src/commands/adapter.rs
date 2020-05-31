@@ -253,6 +253,26 @@ pub fn user_checkin(member: &User) -> bool {
 	flag
 }
 
+pub fn get_user(user_str: &str) -> Option<User> {
+	for (i, (_string, u)) in USERS.lock().unwrap().iter().enumerate() {
+		if u.to_string() == user_str {
+			return Some(User::from(&u));
+		}
+	}
+	None
+}
+
+pub fn user_description(user_str: &str) -> String {
+	match get_user(user_str) {
+		None => {
+			return String::from("");
+		},
+		Some(user) => {
+			return String::from(&user.description);
+		}
+	}
+}
+
 // List all free (without group) users.
 pub fn list_free_users() -> Vec<User> {
 	let mut v = Vec::new();
@@ -381,7 +401,7 @@ pub fn accept_member(group: &Group, user_str: &str) -> String {
 			hash = s.parse::<u16>().unwrap();
 		}
 	}
-	let user = User::new(&name, "", hash);
+	let user = User::new(&name, &user_description(&name), hash);
 	/*match group_of_member(&user) {
 		None => {
 			return String::from("You are in no group. Therefore you can't accept members.");

@@ -2,6 +2,7 @@ use crate::commands::adapter::list_applicants_for_group;
 use crate::commands::adapter::group_of_member;
 use crate::commands::adapter::accept_member;
 use crate::commands::adapter::User;
+use crate::commands::adapter::user_description;
 use serenity::prelude::*;
 use serenity::model::prelude::*;
 use serenity::framework::standard::{
@@ -12,7 +13,7 @@ use serenity::framework::standard::{
 #[command]
 pub fn accept(ctx: &mut Context, msg: &Message) -> CommandResult {
 	// let user_name = format!("{}#{}", &msg.author.name, &msg.author.discriminator);
-	let user = User::new(&msg.author.name, "", msg.author.discriminator);
+	let user = User::new(&msg.author.name, &user_description(&msg.author.name), msg.author.discriminator);
 	// let _ = msg.reply(&ctx, format!("DEBUG: {}", user.to_string()));
 	let users_group = group_of_member(&user);
 	match users_group {

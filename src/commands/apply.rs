@@ -2,6 +2,7 @@ use crate::commands::adapter::group_of_member;
 use crate::commands::adapter::User;
 use crate::commands::adapter::pos_of_group_name;
 use crate::commands::adapter::apply_for_group_name;
+use crate::commands::adapter::user_description;
 use serenity::prelude::*;
 use serenity::model::prelude::*;
 use serenity::framework::standard::{
@@ -11,7 +12,7 @@ use serenity::framework::standard::{
 
 #[command]
 pub fn apply(ctx: &mut Context, msg: &Message) -> CommandResult {
-	let user = User::new(&msg.author.name, "", msg.author.discriminator);
+	let user = User::new(&msg.author.name, &user_description(&msg.author.name), msg.author.discriminator);
 	let users_group = group_of_member(&user);
 	match users_group {
 		None => {
@@ -29,7 +30,7 @@ pub fn apply(ctx: &mut Context, msg: &Message) -> CommandResult {
 						Some(_) => {
 							// TODO: insert Users description
 							let _ = msg.reply(&ctx, format!("Applying for group {}", group_name));
-							let user = User::new(&msg.author.name, "", msg.author.discriminator);
+							let user = User::new(&msg.author.name, &user_description(&msg.author.name), msg.author.discriminator);
 							apply_for_group_name(&user, &group_name);
 						}
 					}

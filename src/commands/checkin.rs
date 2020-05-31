@@ -1,5 +1,6 @@
 use crate::commands::adapter::User;
 use crate::commands::adapter::user_checkin;
+use crate::commands::adapter::user_description;
 
 use serenity::prelude::*;
 use serenity::model::prelude::*;
@@ -13,7 +14,7 @@ pub fn checkin(ctx: &mut Context, msg: &Message) -> CommandResult {
 	let user = &msg.author;
 	let name = &user.name;
 	let hash = user.discriminator;
-	let flag: bool = user_checkin(&User::new(&name, "", hash));
+	let flag: bool = user_checkin(&User::new(&name, &user_description(&name), hash));
 
 	if !flag {
 		let pri_message = format!("Hello, {}! Yor are now checked in!", name);
