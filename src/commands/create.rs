@@ -31,6 +31,7 @@ pub fn create(ctx: &mut Context, msg: &Message) -> CommandResult {
 			}
 		}
 	}
+	let _ = msg.delete(&ctx);
 	Ok(())
 }
 

@@ -332,3 +332,8 @@ pub fn show_current_application(member: &User) -> Vec<String> {
 pub fn clear_all_applications_from_user(member: &User) {
 	APPLICANTS.lock().unwrap().remove(&member.to_string());
 }
+
+// Apply for a group.
+pub fn accept_member(group_name: &str, user_str: &str) -> bool {
+	true
+}

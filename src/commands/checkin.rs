@@ -32,6 +32,6 @@ pub fn checkin(ctx: &mut Context, msg: &Message) -> CommandResult {
 			m
 		});
 	}
-	
+	let _ = msg.delete(&ctx);
 	Ok(())
 }

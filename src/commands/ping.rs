@@ -8,5 +8,6 @@ use serenity::framework::standard::{
 #[command]
 pub fn ping(ctx: &mut Context, msg: &Message) -> CommandResult {
 	let _ = msg.reply(&ctx, "pong!");
+	let _ = msg.delete(&ctx);
 	Ok(())
 }

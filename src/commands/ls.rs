@@ -20,5 +20,6 @@ pub fn ls(ctx: &mut Context, msg: &Message, args: Args) -> CommandResult {
 		}
 		let _ = msg.reply(&ctx, ret);
 	}
+	let _ = msg.delete(&ctx);
 	Ok(())
 }

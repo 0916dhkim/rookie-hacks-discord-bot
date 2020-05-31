@@ -19,5 +19,6 @@ pub fn help(ctx: &mut Context, msg: &Message) -> CommandResult {
 	`!merge <first_group_name> <second_group_name>`: Merge two groups.
 	`!describe <group_name>`: Show group summary.";
 	let _ = msg.reply(&ctx, help_message);
+	let _ = msg.delete(&ctx);
 	Ok(())
 }

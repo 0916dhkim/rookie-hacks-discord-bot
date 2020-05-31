@@ -27,5 +27,6 @@ pub fn leave(ctx: &mut Context, msg: &Message) -> CommandResult {
 			}
 		}
 	}
+	let _ = msg.delete(&ctx);
 	Ok(())
 }
